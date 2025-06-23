@@ -3,6 +3,7 @@ import os
 import sys
 
 class Option(TypedDict, total=False):
+    """Class that controls the formatting of each option in the options list"""
     label: str                               # Display label for the TUI
     function: Callable                       # The function to call
     args: Optional[List[Any]]                # Static positional arguments (optional)
@@ -10,6 +11,7 @@ class Option(TypedDict, total=False):
     prompt_args: Optional[List[str]]         # Prompts for runtime positional args (optional)
 
 class FrontendTUI:
+    """Reuseable frontend TUI class"""
     def __init__(self, options: List[Option] = [], app_name:str = "My TUI App"):
         self.title = app_name
         self.options = options
@@ -76,17 +78,17 @@ class FrontendTUI:
             cancelled  = False
             
             self.print_header(option["label"])
+            print("Press ESC to cancel and go back . . .")
+            print()
+            
             for prompt in option.get("prompt_args", []):
-                print("Press ESC to cancel and go back . . .")
-                print()
-                
                 val = input_with_esc(f"{prompt}: ")
+                
                 if val is None:  # ESC pressed -> cancel input gathering
                     cancelled = True
                     break
                 runtime_pos.append(val)
 
-                
             if cancelled:
                 continue
             
